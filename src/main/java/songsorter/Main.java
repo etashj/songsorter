@@ -158,6 +158,10 @@ public class Main {
 		initialize();
 	}
 
+	/**
+	 * Switch the window panel to be the input panel
+	 * @param mainInput the JPanel to be drawn to
+	 */
 	private void addIntro(JPanel mainInput) {
 		mainInput.setAutoscrolls(true);
 		
@@ -333,6 +337,11 @@ public class Main {
 		mainInput.add(cacheBtn, gbc_cacheBtn);
 	}
 	
+	/**
+	 * Switch the window panel to be the output panel for a single song
+	 * @param out the JPanel to be drawn to
+	 * @param so the {@code Song} that is the subject of analysis
+	 */
 	public void addSingleOut(JPanel out, Song so) {
 		out.setVisible(true);
 		out.removeAll();
@@ -530,6 +539,10 @@ public class Main {
 		out.repaint();
 	}
 	
+	/**
+	 * Switch the window panel to be the output panel for a playlist/multiple songs
+	 * @param out the panel to be drawn to
+	 */
 	public void addMultiOut(JPanel out) {
 		out.setVisible(true); 
 		out.removeAll();
