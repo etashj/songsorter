@@ -6,7 +6,7 @@ package songsorter.music;
 public class NoPreviewException  extends RuntimeException {
     
     /**
-     * Constructs a {@code IllegalAudioLengthException} with {@code null}
+     * Constructs a {@code NoPreviewException} with {@code null}
      * as its error message string.
      */
     public NoPreviewException() {
@@ -14,7 +14,7 @@ public class NoPreviewException  extends RuntimeException {
     }
 
     /**
-     * Constructs a {@code IllegalAudioLengthException} with the specified message
+     * Constructs a {@code NoPreviewException} with the specified message
      * as its error message string.
      * @param s the error message
      */
