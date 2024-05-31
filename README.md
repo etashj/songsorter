@@ -1,6 +1,8 @@
 # Song Sorter
 **Data Structures and Algorithms Final Project**
 
+**GUI for https://github.com/etashj/Exploring-and-Applying-Audio-Based-Sentiment-Analysis**
+
 ## Description
 A program that takes an input as a mp3 file, Spotify song link, or Spotify playlist link, and passes them through a [Long Short Term Memory Model](https://en.wikipedia.org/wiki/Long_short-term_memory) which can interpret the music clip and return a coordinate which represents the "arousal" and "valence" on [Russel's Circumplex Model of Affect](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2367156/). This model essentially describes the emotion a music clip induces in a listener quantitatively. Then, each song's metadata is linked to an emotional coordinate. These coordinates will be sorted such that every point is covered in the minimum possible distance (traveling salesman problem). This will be implemented with a heuristic algorithm. The newly sorted playlist will be sorted by emotion and returned to the user for a better listening experience. 
 
