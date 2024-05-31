@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>io.github.etashj.songsorter</groupId>
+  <artifactId>songsorter</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>Song Sorter</name>
+  <description>An application to utilize a LSTM neural network that predicts the emtion of a music clip and provide a GUI that lets you sort the songs. </description>
+
+
+  <dependencies>
+
+    <dependency>
+      <groupId>jfreechart</groupId>
+      <artifactId>jfreechart</artifactId>
+      <version>1.0.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>se.michaelthelin.spotify</groupId>
+      <artifactId>spotify-web-api-java</artifactId>
+      <version>9.0.0-RC1</version>
+    </dependency>
+
+  </dependencies>
+  <properties>
+  <maven.compiler.source>1.21</maven.compiler.source>
+  <maven.compiler.target>1.21</maven.compiler.target>
+</properties>
+</project>
