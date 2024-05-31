@@ -22,3 +22,4 @@ src/main/resources/keys.properties
 .settings
 .vscode
 songsorter.jar
+.DS_Store
