@@ -51,6 +51,7 @@ public class SorterPlaylist {
                 songs[i] = new SpotifySong((Track) t.getTrack()); 
             } catch (NoPreviewException e) {
                 System.out.println("A song does not have a preview and will be excluded from results");
+                i--; 
             }
             i++; 
         }
@@ -91,7 +92,8 @@ public class SorterPlaylist {
      */
     public void setEmotions(PythonEnvHandler penv) throws PythonError, IOException, InterruptedException {
         for (SpotifySong s: songs) {
-            s.setEmotions(penv);
+            if (s!=null)
+                s.setEmotions(penv);
         }
     }
 
@@ -102,7 +104,9 @@ public class SorterPlaylist {
     public double[] avgArousals() {
         double[] arousals = new double[songs.length]; 
         for(int i=0; i<songs.length; i++) {
-            arousals[i] = songs[i].getAverageArousal(); 
+            if (songs[i] != null) {
+                arousals[i] = songs[i].getAverageArousal(); 
+            }
         }
         return arousals; 
     }
@@ -114,7 +118,9 @@ public class SorterPlaylist {
     public double[] avgValences() {
         double[] valences = new double[songs.length]; 
         for(int i=0; i<songs.length; i++) {
-            valences[i] = songs[i].getAverageValence(); 
+            if (songs[i] != null) {
+                valences[i] = songs[i].getAverageValence(); 
+            }
         }
         return valences; 
     }
@@ -204,14 +210,18 @@ public class SorterPlaylist {
         songs[randIdx] = songs[0]; 
         songs[0] = null; 
 
-        for (int i = 1; i<songs.length; i++) {
+        for(int i=1; i<songs.length; i++) {
             SpotifySong closest = songs[i]; 
+            int idx = i; 
             for (int j = i+1; j<songs.length; j++) {
                 if (songs[j] != null && newArr[i-1].distance(closest) > newArr[i-1].distance(songs[j])) {
                     closest = songs[j]; 
+                    idx = j; 
                 }
             }
             newArr[i] = closest; 
+            songs[idx] = songs[i];
+            songs[i]=null;  
         }
 
         songs = newArr; 

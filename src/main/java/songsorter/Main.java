@@ -78,6 +78,7 @@ public class Main {
 	private static SongPanel[] songPanels; 
 	private static JPanel panel;
 	private static ChartPanel graph;  
+	private static JTabbedPane tabbedPane; 
 	private static SorterPlaylist playlist; 
 	
 	private static final PythonEnvHandler penv = makePythonEnv();
@@ -228,10 +229,10 @@ public class Main {
 						addMultiOut(playlistOutput);
 					} else if (SpotifySong.isSong(textField.getText())) {
 							try {
-								mainInput.setVisible(false);
 								SpotifySong s;
 								s = new SpotifySong(sapi, textField.getText());
 								addSingleOut(singleOutput, s);
+								mainInput.setVisible(false);
 							} catch (NoPreviewException e1) {
 								JOptionPane.showMessageDialog(frame, "A Spotify song does not have a public preview, it may be exlcuded from results. ", "Error", JOptionPane.ERROR_MESSAGE);
 								e1.printStackTrace();
@@ -518,9 +519,9 @@ public class Main {
 		yAxis = (NumberAxis) plot.getRangeAxis();
         yAxis.setRange(-1.0, 1.0);
         
-        ChartPanel valence_panel = new ChartPanel(vChart);
-        arousal_panel.setHorizontalAxisTrace(true);
-        arousal_panel.setVerticalAxisTrace(true);
+		ChartPanel valence_panel = new ChartPanel(vChart);
+		arousal_panel.setHorizontalAxisTrace(true);
+		arousal_panel.setVerticalAxisTrace(true);
 		tabbedPane.addTab("Valence", null, valence_panel, null);
 		
 		JButton btnNewButton = new JButton("Back");
@@ -568,7 +569,7 @@ public class Main {
 		gbc_lblNewLabel.gridy = 0;
 		out.add(lblNewLabel, gbc_lblNewLabel);
 		
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
 		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
 		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
@@ -582,9 +583,6 @@ public class Main {
 		panel = new JPanel();
 		scrollPane.setViewportView(panel);
 		panel.setLayout(new GridLayout(0, 1, 0, 0));
-		
-		graph = new ChartPanel(playlist.asChart()); 
-		tabbedPane.addTab("Graph", null, graph, null);
 
 		ArrayQueue<SpotifySong> arrQSS = playlist.asQueue(); 
 		songPanels = new SongPanel[playlist.length()]; 
@@ -592,9 +590,12 @@ public class Main {
 		while (!arrQSS.isEmpty()) {
 			SongPanel songPanel;
 			try {
-				songPanel = new SongPanel(arrQSS.dequeue());
-				songPanels[i] = songPanel; 
-				panel.add(songPanel);
+				SpotifySong ss = arrQSS.dequeue(); 
+				if (ss!=null) {
+					songPanel = new SongPanel(ss);
+					songPanels[i] = songPanel; 
+					panel.add(songPanel);
+				}
 			} catch (ParseException e1) {
 				JOptionPane.showMessageDialog(frame, "A ParseException occured while creating the Playlist Output, some songs may be missing. ", "Error", JOptionPane.ERROR_MESSAGE);
 				e1.printStackTrace();
@@ -614,6 +615,7 @@ public class Main {
 			i++; 
 		}
 		
+
 		JButton sortBtn = new JButton("Sort");
 		GridBagConstraints gbc_sortBtn = new GridBagConstraints();
 		gbc_sortBtn.insets = new Insets(0, 0, 5, 0);
@@ -624,6 +626,9 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {
 				EmotionSort sorterTask = new EmotionSort(frame, playlist); 
 				sorterTask.execute();
+				while (!sorterTask.isDone()) {
+					continue; 
+				}
 				playlist = sorterTask.getPlaylist(); 
 				addMultiOut(out);
 			}
@@ -692,17 +697,29 @@ public class Main {
 			ArrayQueue<SongPanel> panelQueue = new ArrayQueue<SongPanel>(songPanels); 
 			while (!panelQueue.isEmpty()) {
 				SongPanel sp = panelQueue.dequeue(); 
-				try {
-					sp.updateEmotions(penv);
-					sp.repaint();
-				} catch (PythonError | IOException | InterruptedException e) {
-					JOptionPane.showMessageDialog(frame, "An error occured while computing emotion, some songs's information may be missing. ", "Error", JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
-				} 
+				if (sp!=null) {
+					try {
+						sp.updateEmotions(penv);
+						sp.repaint();
+					} catch (PythonError | IOException | InterruptedException e) {
+						JOptionPane.showMessageDialog(frame, "An error occured while computing emotion, some songs's information may be missing. ", "Error", JOptionPane.ERROR_MESSAGE);
+						e.printStackTrace();
+					} 
+				}
 			} 
-			graph.getChart().getXYPlot().setDataset(playlist.asDataset());
-			graph.repaint();
-			graph.revalidate();
+			
+			try {
+				playlist.setEmotions(penv);
+			} catch (PythonError | IOException | InterruptedException e) {
+				JOptionPane.showMessageDialog(frame, "An error occured while computing emotion, some songs's information may be missing. ", "Error", JOptionPane.ERROR_MESSAGE);
+				e.printStackTrace();
+			}
+
+			graph = new ChartPanel(playlist.asChart()); 
+			tabbedPane.addTab("Graph", null, Main.graph, null);
+			tabbedPane.repaint();
+			tabbedPane.revalidate();
+
 			return 0; 
      	}
 

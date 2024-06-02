@@ -96,7 +96,11 @@ public class SongPanel extends JPanel {
 		gbc_lblTrack.gridy = 0;
 		panel.add(lblTrack, gbc_lblTrack);
 		
-		arousalLabel = new JLabel("Arousal: " + (int)(s.getAverageArousal()*10000)/10000.0);
+		try {
+			arousalLabel = new JLabel("Arousal: " + (int)(s.getAverageArousal()*10000)/10000.0);
+		} catch (NullPointerException e) {
+			arousalLabel = new JLabel("...");
+		}
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
 		gbc_lblNewLabel_2.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_2.gridx = 1;
@@ -112,7 +116,11 @@ public class SongPanel extends JPanel {
 		gbc_lblArtist.gridy = 1;
 		panel.add(lblArtist, gbc_lblArtist);
 		
-		valenceLabel = new JLabel("Valence: " + (int)(s.getAverageArousal()*10000)/10000.0);
+		try {
+			valenceLabel = new JLabel("Valence: " + (int)(s.getAverageArousal()*10000)/10000.0);
+		} catch (NullPointerException e) {
+			valenceLabel = new JLabel("...");
+		}
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 5, 0);
 		gbc_lblNewLabel_1.gridx = 1;
