@@ -44,9 +44,7 @@ public class EmotionPoint {
      * @return String emotion
      */
     public String asEmotion() {
-        double theta =Math.toDegrees(Math.asin(arousal/valence));
-
-        System.out.println(Math.asin(arousal/valence));
+        double theta = Math.toDegrees(Math.atan(arousal/valence));
 
         if (theta > 345 || theta <= 15) {
             return "Satisfied"; 
